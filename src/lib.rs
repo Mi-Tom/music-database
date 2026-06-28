@@ -44,24 +44,7 @@ impl Song {
         println!("{:.<20.17} {:.<20.17} {:.<20.17} {:^8} {:4}", &self.title, &self.artists, option_output.0, option_output.1, option_output.2);
     }
 }
-
-#[derive(Default)]
-pub struct SongVec {
-    pub data: Vec<Song>
-}
-impl SongVec {
-    pub fn len(&self) -> usize{
-        self.data.len()
-    }
-
-    pub fn get(&self, index: usize) -> Option<&Song> {
-        self.data.get(index)
-    }
-
-    pub fn push(&mut self, title: &str, artist: &str) {
-        self.data.push(Song::add(title, artist));
-    }
-
+/*
     pub fn output(&self) {
         println!("Title                Artist/s             Album                duration year");
         println!("-------------------- -------------------- -------------------- -------- ----");
@@ -70,7 +53,7 @@ impl SongVec {
         }
         println!("----------------------------------------------------------------------------");
     }
-}
+ */
 
 #[cfg(test)]
 mod tests {
@@ -81,21 +64,5 @@ mod tests {
         let song = Song::add("Imagine", "John Lennon");
         assert_eq!(song.title, "Imagine");
         assert_eq!(song.artists, "John Lennon");
-    }
-
-    #[test]
-    fn songvec_push_len() {
-        let mut song_array = SongVec::default();
-        song_array.push("Faded", "Alan Walker");
-        assert_eq!(song_array.data.len(), 1);
-        assert_eq!(song_array.len(), song_array.data.len());
-    }
-
-    #[test]
-    fn songvec_get() {
-        let mut song_array = SongVec::default();
-        song_array.push("Faded", "Alan Walker");
-        assert_eq!(song_array.get(0).unwrap().title, "Faded");
-        assert_eq!(song_array.get(0).unwrap().artists, "Alan Walker");
     }
 }
