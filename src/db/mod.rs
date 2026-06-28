@@ -1,4 +1,5 @@
 use rusqlite::{Connection, Result};
+use uuid::Uuid;
 
 use crate::models::Song;
 
@@ -86,5 +87,59 @@ impl Database {
             })),
             None => Ok(None),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::NamedTempFile;
+    use crate::models::Song;
+
+    #[test]
+    fn database_init_open() {
+        let file = NamedTempFile::new().unwrap();
+        let result = Database::open(file.path().to_str().unwrap());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn database_write() {
+        let file = NamedTempFile::new().unwrap();
+        let db = Database::open(file.path().to_str().unwrap()).unwrap();
+        assert!(db.write(&Song::add("Happy now", "Zedd, Elley Duhé")).is_ok())
+    }
+
+    #[test]
+    fn database_get_songs() {
+        let file = NamedTempFile::new().unwrap();
+        let db = Database::open(file.path().to_str().unwrap()).unwrap();
+        let mut original_array: Vec<Song> = Vec::new();
+        for i in 0..=10 {
+            let title = format!("title{}", i);
+            let artist = format!("artist{}", i);
+            original_array.push(Song::add(&title, &artist));
+            db.write(original_array.get(i).unwrap()).unwrap();
+        }
+        let new_array = db.get_songs(5, 2).unwrap();
+        for i in 2..new_array.iter().len() + 2 as usize {
+            let j = i - 2;
+            assert_eq!(original_array.get(i).unwrap().title, new_array.get(j).unwrap().title);
+        }
+    }
+
+    #[test]
+    fn database_get_song_by_id() {
+        let file = NamedTempFile::new().unwrap();
+        let db = Database::open(file.path().to_str().unwrap()).unwrap();
+        let mut original_array: Vec<Song> = Vec::new();
+        for i in 0..=10 {
+            let title = format!("title{}", i);
+            let artist = format!("artist{}", i);
+            original_array.push(Song::add(&title, &artist));
+            db.write(original_array.get(i).unwrap()).unwrap();
+        }
+        let new = db.get_song_by_id(original_array.get(4).unwrap().uuid).unwrap().unwrap();
+        assert_eq!(new.title, original_array.get(4).unwrap().title);
     }
 }
