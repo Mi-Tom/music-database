@@ -43,4 +43,25 @@ impl Database {
         )?;
         Ok(())
     }
+
+    pub fn get_songs(&self, limit: usize, offset: usize) -> Result<Vec<Song>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, title, artists, album, duration, year FROM songs LIMIT ?1 OFFSET ?2"
+        )?;
+    
+        let songs = stmt.query_map([limit, offset], |row| {
+            Ok(Song {
+                uuid: row.get::<_, String>(0)?.parse().unwrap(),
+                title: row.get(1)?,
+                artists: row.get(2)?,
+                album: row.get(3)?,
+                duration: row.get(4)?,
+                year: row.get(5)?,
+                deleted: false
+            })
+        })?
+        .collect::<Result<Vec<_>>>()?;
+    
+        Ok(songs)
+    }
 }

@@ -2,15 +2,13 @@ use uuid::Uuid;
 
 #[derive(Debug)]
 pub struct Song {
-    #[allow(dead_code)]
     pub uuid: Uuid,
     pub title: String,
     pub artists: String,
     pub album: Option<String>,
     pub duration: Option<i32>,
     pub year: Option<i32>,
-    #[allow(dead_code)]
-    deleted: bool
+    pub deleted: bool
 }
 impl Song {
     pub fn add(title: &str, artist: &str) -> Self {
