@@ -3,7 +3,7 @@ use uuid::Uuid;
 #[derive(Debug)]
 pub struct Song {
     #[allow(dead_code)]
-    uuid: Uuid,
+    pub uuid: Uuid,
     pub title: String,
     pub artists: String,
     pub album: Option<String>,

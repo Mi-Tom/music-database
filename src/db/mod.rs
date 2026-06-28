@@ -27,4 +27,20 @@ impl Database {
         db.init()?;
         Ok(db)
     }
+
+    pub fn write(&self, song: &Song) -> Result<()> {
+        self.conn.execute(
+            "INSERT INTO songs (id, title, artists, album, duration, year)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+            (
+                song.uuid.to_string(),
+                &song.title,
+                &song.artists,
+                &song.album,
+                song.duration,
+                song.year,
+            ),
+        )?;
+        Ok(())
+    }
 }
