@@ -1,5 +1,6 @@
-use music_database::*;
+use music_database::models::Song;
 
 fn main() {
-    println!("hi sky");
+    let song = Song::add("Faded", "Alan Walker");
+    song.output();
 }
