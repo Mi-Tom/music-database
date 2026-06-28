@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use uuid::Uuid;
 
 #[derive(Debug)]
