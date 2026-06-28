@@ -65,12 +65,14 @@ impl Database {
         Ok(songs)
     }
 
-    pub fn get_song_by_id(&self, uuid: &str) -> Result<Option<Song>> {
+    pub fn get_song_by_id(&self, uuid: Uuid) -> Result<Option<Song>> {
+        let uuid_string = uuid.to_string();
+        let id = &uuid_string;
         let mut stmt = self.conn.prepare(
             "SELECT id, title, artists, album, duration, year FROM songs WHERE id = ?1"
         )?;
     
-        let mut rows = stmt.query([uuid])?;
+        let mut rows = stmt.query([id])?;
     
         match rows.next()? {
             Some(row) => Ok(Some(Song {
