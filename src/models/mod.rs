@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use uuid::Uuid;
 
 #[derive(Debug)]
@@ -25,15 +27,25 @@ impl Song {
         }
     }
 
-    pub fn output(&self) {
-        let option_output: (String, String, String) = (
+    pub fn format_row(&self) -> String {
+        let option_output: (String, String, String, String, String) = (
+            if self.title.len() > 20 as usize {
+                format!("{:<.17}...", self.title)
+            } else {
+                self.title.to_string()
+            },
+            if self.artists.len() > 20 as usize {
+                format!("{:<.17}...", self.title)
+            } else {
+                self.artists.to_string()
+            },
             match &self.album {
                 Some(name) => name.to_string(),
-                None => "_________________".to_string()
+                None => "____________________".to_string()
             },
             match &self.duration {
                 Some(time) => time.to_string(),
-                None => "_____".to_string()
+                None => "________".to_string()
             },
             match &self.year {
                 Some(year) => year.to_string(),
@@ -41,7 +53,7 @@ impl Song {
             },
         );
 
-        println!("{:.<20.17} {:.<20.17} {:.<20.17} {:^8} {:4}", &self.title, &self.artists, option_output.0, option_output.1, option_output.2);
+        format!("{:<20} {:<20} {:<20} {:^8} {:4}", option_output.0, option_output.1, option_output.2, option_output.3, option_output.4)
     }
 }
 /*
