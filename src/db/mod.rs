@@ -20,4 +20,11 @@ impl Database {
         ")?;
         Ok(())
     }
+    
+    pub fn open(path: &str) -> Result<Self> {
+        let conn = Connection::open(path)?;
+        let db = Database { conn };
+        db.init()?;
+        Ok(db)
+    }
 }
