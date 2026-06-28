@@ -77,4 +77,12 @@ mod tests {
         assert_eq!(song.title, "Imagine");
         assert_eq!(song.artists, "John Lennon");
     }
+
+    #[test]
+    fn song_format_row() {
+        let mut song = Song::add("Faded", "Alan Walker");
+        assert_eq!(song.format_row(), "Faded                Alan Walker          ____________________ ________ ____");
+        song = Song::add("Like a Rolling Stones", "Bob Dylan");
+        assert_eq!(song.format_row(), "Like a Rolling St... Bob Dylan            ____________________ ________ ____");
+    }
 }
